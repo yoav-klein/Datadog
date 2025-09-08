@@ -24,5 +24,5 @@ function Query-TimeSeries {
     Write-Host "Datadog response: $($response | ConvertTo-Json -Depth 5)"
 }
 
-$Query = "sum:my.custom.metric{*}.as_count().rollup(sum, 1)"
-Query-TimeSeries $Query -Duration 5
+$Query = "sum:yoav.test{*}.rollup(sum, 10)"
+Query-TimeSeries $Query -Duration 20

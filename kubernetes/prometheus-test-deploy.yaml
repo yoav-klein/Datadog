@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: digi
+  name: prometheus-example
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: prometheus-example
+    template:
+      metadata:
+        labels:
+           app: prometheus-example
+        annotations:
+          ad.datadoghq.com/prometheus-example.checks: |
+           {
+            "openmetrics": {
+              "init_config": {},
+              "instances": [
+                {
+                  "openmetrics_endpoint": "http://%%host%%:%%port%%/metrics",
+                  "namespace": "toy",
+                  "metrics": [".*"]
+                }
+              ]
+            }
+           }
+      spec:
+        containers:
+        - name: prometheus-example
+          image: yoavklein3/python-prometheus:0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+
